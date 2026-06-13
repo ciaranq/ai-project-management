@@ -115,7 +115,7 @@ Once all issues in stage N are closed:
 
 ## Stage 0: Project Setup
 
-**Goal**: Establish foundations so all future work is consistent and traceable.
+**Goal**: Establish complete project foundations — version control, structure, dependencies, deployment, and database — so all future work is consistent and traceable.
 
 ### Checklist
 - [ ] Git repo initialised (`git init` or confirm exists)
@@ -123,21 +123,87 @@ Once all issues in stage N are closed:
 - [ ] Label taxonomy created (see below)
 - [ ] Milestones created for Stages 1–6
 - [ ] Folder structure created
+- [ ] Environment detected and dependency files created
+- [ ] Deploy configuration scaffolded
+- [ ] Database/storage requirements identified and files created
+- [ ] `.env.example` created with required variable names
 - [ ] Setup issue created and closed
+
+### Environment Detection
+
+Before creating files, detect what kind of project this is:
+```bash
+ls package.json pyproject.toml Gemfile go.mod Cargo.toml 2>/dev/null
+```
+
+Then scaffold the appropriate dependency and tooling files:
+
+| Stack | Files to create |
+|-------|----------------|
+| Node/TypeScript | `package.json`, `tsconfig.json`, `.nvmrc` |
+| Python | `pyproject.toml` or `requirements.txt`, `.python-version` |
+| Ruby | `Gemfile`, `.ruby-version` |
+| Go | `go.mod` |
+| Multi-language | One per language in appropriate subdirectory |
 
 ### Folder Structure
 ```
 project/
 ├── .claude/
 │   └── CLAUDE.md           (project brief for Claude — fill in after Stage 1)
+├── .github/
+│   └── workflows/          (CI/CD — scaffold even if empty)
 ├── docs/
 │   ├── problem-discovery/  (Stage 1 & 2 outputs)
 │   ├── solution-design/    (Stage 3 & 4 outputs)
 │   ├── testing/            (Stage 5 outputs)
 │   └── iterations/         (Stage 6 outputs, one file per iteration)
 ├── src/                    (implementation — populated in Stage 4+)
+├── .env.example            (required env var names, no values)
 └── README.md
 ```
+
+### Deploy Scaffolding
+
+Ask the user where this will be deployed, then create the appropriate config:
+
+| Target | Files |
+|--------|-------|
+| Vercel | `vercel.json` |
+| Docker | `Dockerfile`, `.dockerignore` |
+| GitHub Actions CI | `.github/workflows/ci.yml` |
+| Railway / Render | `railway.json` or `render.yaml` |
+| AWS Lambda | `serverless.yml` or SAM template |
+
+If unknown at Stage 0, create `.github/workflows/ci.yml` with a commented template.
+
+### Database / Storage
+
+Identify storage requirements early — changing this later is expensive:
+
+| Need | Files to create |
+|------|----------------|
+| SQL (Postgres/SQLite) | `db/schema.sql` or ORM migration folder |
+| NoSQL (MongoDB/Redis) | `db/` with a `schema.md` describing collections |
+| Vector DB (for AI) | Note provider (Pinecone, pgvector, etc.) in CLAUDE.md |
+| File storage | Note S3/GCS bucket config needed in `.env.example` |
+| None | Document explicitly in the setup issue |
+
+### .env.example
+Always create `.env.example` with variable names (not values). Common AI project vars:
+```
+# AI Provider
+ANTHROPIC_API_KEY=
+OPENAI_API_KEY=
+
+# Database
+DATABASE_URL=
+
+# App
+NODE_ENV=
+PORT=
+```
+Add variables as they become known in later stages.
 
 ### Label Taxonomy
 ```bash

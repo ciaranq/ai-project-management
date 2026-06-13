@@ -14,18 +14,43 @@ The skill will detect no existing stages and begin Stage 0.
 
 ### 2. Stage 0: Project Setup
 
-Claude will:
+Claude will detect your environment and scaffold the full technical foundation:
+
+**Version control & GitHub**
 - Confirm or create a git repo
 - Create or connect to a GitHub remote (`gh repo create`)
-- Create the label taxonomy (9 labels, `stage:0-setup` through `stage:6-iteration` plus `blocker` and `decision`)
-- Create milestones for Stages 1–6
-- Create the folder structure (`docs/`, `.claude/`, `src/`)
-- Create and close a setup checklist issue
+- Create the label taxonomy and milestones for Stages 1–6
 
-When Stage 0 is done, you'll have a clean, consistent project scaffold. Verify with:
+**Environment & dependencies**
+- Detect project stack (Node, Python, Ruby, Go, etc.)
+- Create appropriate dependency files (`package.json`, `pyproject.toml`, etc.)
+
+**Deploy configuration**
+- Ask where this will be deployed (Vercel, Docker, Railway, AWS, etc.)
+- Scaffold the appropriate config files (e.g. `vercel.json`, `Dockerfile`, `.github/workflows/ci.yml`)
+
+**Database / storage**
+- Identify storage requirements (SQL, NoSQL, vector DB, file storage, or none)
+- Create migration folder structure or schema docs as appropriate
+
+**Environment variables**
+- Create `.env.example` with required variable names (never values)
+
+**Project structure**
+```
+project/
+├── .claude/CLAUDE.md       ← project brief (filled after Stage 1)
+├── .github/workflows/      ← CI/CD scaffold
+├── docs/                   ← stage outputs
+├── src/                    ← implementation (Stage 4+)
+└── .env.example
+```
+
+When Stage 0 is done, you'll have a complete, consistent project scaffold. Verify with:
 ```bash
 gh label list
 gh api repos/{owner}/{repo}/milestones --jq '.[].title'
+ls -la
 ```
 
 ### 3. Stages 1–6: Issue-Driven Progression
