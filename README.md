@@ -37,14 +37,18 @@ To install manually:
 3. Add to `~/.claude/settings.json` under `enabledPlugins`: `"ai-pm@local": true`
 4. Restart Claude Code
 
-## Usage
+## Commands
 
-The skill triggers automatically when Claude detects AI project management work. You can also invoke it explicitly:
+| Command | What it does |
+|---------|-------------|
+| `/ai-pm:setup` | Stage 0 — scaffolds git, GitHub, labels, milestones, dependencies, deploy config, DB, `.env.example` |
+| `/ai-pm:stage` | Show current stage status and what's blocking progress |
+| `/ai-pm:stage next` | Gate-check current stage then advance — creates all issues for the next stage |
+| `/ai-pm:stage status` | Full summary table of all 7 stages |
+| `/ai-pm:stage audit` | Onboard an existing project — scans the codebase, maps to stages, creates retroactive issues |
+| `/ai-pm:stage <N>` | Jump to a specific stage (1–6), with gate checks and confirmation |
 
-- **Start a new project**: "Start a new AI project for [description]"
-- **Check stage status**: "What stage is this project at?"
-- **Advance a stage**: "Move to the next stage"
-- **Onboard existing project**: "Audit this project and bring it into the AI PM workflow"
+The `ai-pm` skill also triggers automatically when Claude detects AI project management context — you don't always need to use the commands explicitly.
 
 See [RUNBOOK.md](RUNBOOK.md) for step-by-step usage and [docs/design/methodology.md](docs/design/methodology.md) for design rationale.
 
