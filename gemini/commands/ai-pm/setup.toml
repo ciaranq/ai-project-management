@@ -1,0 +1,21 @@
+description = "Stage 0: Scaffold the complete project foundation — git, GitHub, labels, milestones, dependency files, deploy config, DB requirements, and .env.example. Run on new projects or add '--existing' for retroactive setup on existing projects."
+prompt = """
+Run Stage 0 of the AI PM workflow using the @setup skill.
+
+User arguments: {{args}}
+
+Work through every section of the setup skill in order:
+1. Detect project mode (new vs existing — check for commits, source files, issues)
+2. Ensure git repo and GitHub remote
+3. Create folder structure (.gemini/, .github/workflows/, docs/, src/)
+4. Detect environment stack and create dependency files
+5. Ask about deploy target and scaffold the config
+6. Ask about database/storage needs
+7. Create .env.example with required variable names
+8. Create GitHub labels and milestones (skip any that already exist)
+9. Create initial commit and push (or scaffold-only commit for existing projects)
+10. Create and close the Stage 0 GitHub issue
+11. Report what was done and what's still TBD
+
+If '--existing' is in the arguments, treat this as an existing project — add scaffold without overwriting any existing files.
+"""

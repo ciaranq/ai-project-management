@@ -1,0 +1,14 @@
+description = "Smart stage navigator for the AI PM workflow. Shows project status, advances stages, or onboards existing projects. Usage: /ai-pm:stage [next | status | audit | 1-6]"
+prompt = """
+Run the AI PM stage navigator using the @stage skill.
+
+User arguments: {{args}}
+
+Parse the arguments to determine mode:
+- No arguments or 'status': show the current stage status table (✓/⚡/○ for each stage) and list blocking issues
+- 'next': gate-check that all current stage issues are closed, then create issues for the next stage
+- 'audit': onboard an existing project — scan git history and docs, map to stages, create retroactive issues
+- A number 1-6: jump to that specific stage (with gate checks and confirmation if skipping stages)
+
+Always start by reading the current GitHub issue state to determine what stage the project is in.
+"""

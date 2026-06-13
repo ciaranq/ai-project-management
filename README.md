@@ -22,20 +22,45 @@ Each stage creates a set of GitHub Issues. The stage is complete when all its is
 
 ## Installation
 
-The skill is installed as a local Claude Code plugin. It is active in all projects when `ai-pm@local` is enabled in `~/.claude/settings.json`.
+### Claude Code
 
-To install manually:
-1. Copy `skills/ai-pm/` to `~/.claude/plugins/cache/local/ai-pm/1.0.0/skills/ai-pm/`
-2. Add to `~/.claude/plugins/installed_plugins.json`:
-   ```json
-   "ai-pm@local": [{
-     "scope": "user",
-     "installPath": "~/.claude/plugins/cache/local/ai-pm/1.0.0",
-     "version": "1.0.0"
-   }]
-   ```
-3. Add to `~/.claude/settings.json` under `enabledPlugins`: `"ai-pm@local": true`
-4. Restart Claude Code
+The skill installs as a local plugin and is active in all projects.
+
+```bash
+# 1. Copy skill files
+mkdir -p ~/.claude/plugins/cache/local/ai-pm/1.0.0/skills
+cp -r skills/ai-pm skills/setup skills/stage ~/.claude/plugins/cache/local/ai-pm/1.0.0/skills/
+cp skills/ai-pm/plugin.json ~/.claude/plugins/cache/local/ai-pm/1.0.0/.claude-plugin/plugin.json
+
+# 2. Register the plugin (add to ~/.claude/plugins/installed_plugins.json under "plugins")
+# "ai-pm@local": [{"scope":"user","installPath":"~/.claude/plugins/cache/local/ai-pm/1.0.0","version":"1.0.0"}]
+
+# 3. Enable in ~/.claude/settings.json under "enabledPlugins"
+# "ai-pm@local": true
+
+# 4. Restart Claude Code
+```
+
+### Gemini CLI (Hermes / AI Pro)
+
+The same SKILL.md format works natively in Gemini CLI. Skills are installed to `~/.gemini/skills/` and commands as TOML files in `~/.gemini/commands/`.
+
+```bash
+# Install skills (with .claude/ → .gemini/ path rewrite)
+mkdir -p ~/.gemini/skills/ai-pm/references ~/.gemini/skills/setup ~/.gemini/skills/stage
+mkdir -p ~/.gemini/commands/ai-pm
+
+sed 's/\.claude\//\.gemini\//g; s/CLAUDE\.md/GEMINI.md/g' skills/ai-pm/SKILL.md > ~/.gemini/skills/ai-pm/SKILL.md
+sed 's/\.claude\//\.gemini\//g; s/CLAUDE\.md/GEMINI.md/g' skills/ai-pm/references/stages.md > ~/.gemini/skills/ai-pm/references/stages.md
+sed 's/\.claude\//\.gemini\//g; s/CLAUDE\.md/GEMINI.md/g' skills/setup/SKILL.md > ~/.gemini/skills/setup/SKILL.md
+sed 's/\.claude\//\.gemini\//g; s/CLAUDE\.md/GEMINI.md/g' skills/stage/SKILL.md > ~/.gemini/skills/stage/SKILL.md
+
+# Install TOML commands
+cp gemini/commands/ai-pm/setup.toml ~/.gemini/commands/ai-pm/setup.toml
+cp gemini/commands/ai-pm/stage.toml ~/.gemini/commands/ai-pm/stage.toml
+```
+
+Gemini activates skills automatically via description matching — no plugin registration needed. Commands are available as `/ai-pm:setup` and `/ai-pm:stage` immediately after installation.
 
 ## Commands
 
