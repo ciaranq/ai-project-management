@@ -93,9 +93,9 @@ cp -r skills/ai-pm skills/setup skills/stage skills/collab ~/.claude/plugins/cac
 # See README.md for full instructions
 ```
 
-**Gemini CLI:**
+**Gemini CLI (Hermes):**
 ```bash
-mkdir -p ~/.gemini/skills/collab/references ~/.gemini/commands/ai-pm
+# Skills
 for skill in ai-pm setup stage collab; do
   mkdir -p ~/.gemini/skills/$skill/references 2>/dev/null
   for f in $(find skills/$skill -name "*.md"); do
@@ -104,7 +104,28 @@ for skill in ai-pm setup stage collab; do
     sed 's/\.claude\//\.gemini\//g; s/CLAUDE\.md/GEMINI.md/g' $f > $dest
   done
 done
+
+# Commands
+mkdir -p ~/.gemini/commands/ai-pm
 cp gemini/commands/ai-pm/*.toml ~/.gemini/commands/ai-pm/
+
+# Agent identity
+mkdir -p ~/.gemini/agents
+cp gemini/agents/hermes.md ~/.gemini/agents/hermes.md
+
+# Global context (brief for every Gemini session)
+cp GEMINI.md ~/.gemini/GEMINI.md
+
+# Set model in settings (preserves existing settings)
+python3 -c "
+import json, os
+p = os.path.expanduser('~/.gemini/settings.json')
+s = json.load(open(p)) if os.path.exists(p) else {}
+s['model'] = 'gemini-2.5-pro'
+s['contextFileName'] = 'GEMINI.md'
+json.dump(s, open(p, 'w'), indent=2)
+print('Settings updated')
+"
 ```
 
 ---
