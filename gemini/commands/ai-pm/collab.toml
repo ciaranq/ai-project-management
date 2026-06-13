@@ -1,0 +1,18 @@
+description = "Multi-model collaboration between Claude and Gemini. Manage handoffs, pick up work the other model left, divide tasks between models, or check collaboration state. Usage: /ai-pm:collab [handoff | pickup | divide <task> | status]"
+prompt = """
+Run the AI collaboration skill (@collab) for multi-model project work between Claude and Gemini.
+
+User arguments: {{args}}
+
+You are Gemini. Parse the arguments to determine mode:
+
+- 'handoff': You are done with a chunk of work. Create a rich .ai-session/handoff.md document, commit it, and update GEMINI.md so Claude can pick up seamlessly. Tell the user exactly what to say to Claude to resume.
+
+- 'pickup': You are starting work. Read .ai-session/handoff.md (if it exists), recent git commits, and open GitHub issues. Brief the user on what Claude left, where work is, and what to do next. Confirm understanding before starting.
+
+- 'divide <task>': Given the task in the arguments, recommend whether Claude or Gemini should handle each part, and in what order. Consult the model-strengths reference to make the recommendation.
+
+- 'status': Show current collaboration state — last handoff, recent commits, open issues, current branch.
+
+Always remember: you are Gemini. The other model is Claude. The handoff file is .ai-session/handoff.md.
+"""
